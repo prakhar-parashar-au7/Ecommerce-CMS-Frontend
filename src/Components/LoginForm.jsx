@@ -11,7 +11,7 @@ import axios from 'axios'
 import {Link, useHistory} from 'react-router-dom'
 import {useDispatch} from 'react-redux'
 import {saveUserInfo} from '../Redux/Actions/actions.js'
-
+import {Spinner} from 'react-bootstrap'
 
 
 const LoginForm = () => {
@@ -23,7 +23,7 @@ const LoginForm = () => {
         const   [Name, setName]  = React.useState("")
         const  [Password, setPassword] = React.useState("")  
         const [Type, setType]  = React.useState("")
-        
+        const [isLoading, setIsLoading] = React.useState(false)
 
    
 
@@ -43,6 +43,7 @@ const LoginForm = () => {
     
 
    const  handleClick = () => {
+       setIsLoading(true)
         alert("please wait for a while")
         axios({
             method : 'post',
@@ -61,6 +62,7 @@ const LoginForm = () => {
           if(response.data.user) {
                   dispatch(saveUserInfo(response.data.user))
                   localStorage.setItem("token", response.data.token)
+                  setIsLoading(false)
                   if(Type == "Admin") {
                       history.push('/adminPage')
                   }
@@ -106,7 +108,11 @@ const LoginForm = () => {
                 <TextField id="Password" label="Password" variant="outlined" onChange={handlePasswordChange} />
                <br></br><br></br>
                 
-                < Button color="primary" variant="contained" onClick={handleClick}>Submit</Button>
+                < Button color="primary" variant="contained" onClick={handleClick}>
+                    {
+                        (isLoading) ? <Spinner animation="border" variant="info" /> :  "Submit"
+                    }
+                   </Button>
                       <br></br><br></br>
                 <Link to = "/signUp">New User ? SignUp here</Link>
                 </div>
@@ -125,7 +131,7 @@ const LoginForm = () => {
                         <br></br>
                         Login using:
                         <br></br> 
-                            Name : Raj
+                            Name : raj
                             <br></br> 
                             Password: raj
                             </p>  
@@ -150,7 +156,7 @@ const LoginForm = () => {
                    <h5> If you're an admin:</h5>
                     <p>  Login using :
                         <br></br> 
-                       Name : Shikhar
+                       Name : shikhar
                        <br></br>
                        Password : admin    <p/>
                     </p>
